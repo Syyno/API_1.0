@@ -1,0 +1,25 @@
+services:
+  db:
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Your_password123
+    image: mcr.microsoft.com/mssql/server
+  redis:
+    image: redis:latest
+    ports:
+    - published: 6379
+      target: 6379
+    restart: always
+  web:
+    build:
+      context: C:\Users\tamus\source\repos\Project
+      dockerfile: Project/Dockerfile
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    ports:
+    - published: 8000
+      target: 80
+version: '3.9'
